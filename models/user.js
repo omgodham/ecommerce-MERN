@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const crypto =require('crypto');
-import { v4 as uuidv4 } from 'uuid';
+const {v4} = require('uuid');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema({
 
 userSchema.virtual('password')
 .set(function(password) {
-        this.salt = uuidv4(),
-        this.encryPassword = securePassword(password)
+        this.salt = v4();
+        this.encryPassword = this.securePassword(password);
   });
 
 userSchema.methods = {
