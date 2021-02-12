@@ -25,14 +25,18 @@ exports.getUser = (req,res) => {
     });
   }
 
-exports.createUser = (req,res) =>{
+
+  exports.updateUser = (req,res) =>{
     const user = new User(req.body);
-    user.save((err,user)=>{
-        if(err){
-            return res.status(400).json({
-                error:'cannot create user'
-            })
+    User.findByIdAndUpdate(req.profile._id,
+        {$set:req.body},
+        {new:true,useFindAndModify:false},
+        (err,updatedUser)=>{
+        if(err || !user){
+          return res.status(400).json({
+                error:'User not found for updation' 
+            });
         }
-        res.status(200).json(user);
+        res.status(200).json(updatedUser);
     });
 }

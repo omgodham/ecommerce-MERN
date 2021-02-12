@@ -32,9 +32,11 @@ userSchema.virtual('password')
   });
 
 userSchema.methods = {
+
     authinticate : function(plainpassword){
         return this.encryPassword == this.securePassword(plainpassword);
     },
+    
     securePassword : function(plainpassword){
         if(plainpassword){
             return crypto.createHmac('sha256', this.salt)
