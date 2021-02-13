@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
+const categoryRoutes = require('./routes/category');
 //DB Connection
 mongoose.connect('mongodb://localhost:27017/ecommerce',{
     useNewUrlParser:true,
@@ -27,6 +28,7 @@ app.use(cors());
 //Routes
 app.use('/api',userRoutes);
 app.use('/api',authRoutes);
+app.use('/api',categoryRoutes);
 
 app.get('/',(req,res)=>{
     res.send('This is the API Page');
