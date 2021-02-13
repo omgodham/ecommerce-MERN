@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique:true
   },
+  salt:String,
   encryPassword:{
     type:String,
     required:true
@@ -25,7 +27,7 @@ const userSchema = new mongoose.Schema({
 },{timestamps:true});
 
 
-userSchema.virtual('password')
+userSchema.virtual("password")
 .set(function(password) {
         this.salt = v4();
         this.encryPassword = this.securePassword(password);
@@ -33,8 +35,8 @@ userSchema.virtual('password')
 
 userSchema.methods = {
 
-    authinticate : function(plainpassword){
-        return this.encryPassword == this.securePassword(plainpassword);
+    authenticate : function(plainpassword){
+        return this.encryPassword === this.securePassword(plainpassword);
     },
     
     securePassword : function(plainpassword){
