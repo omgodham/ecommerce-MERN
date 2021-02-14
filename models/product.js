@@ -13,9 +13,14 @@ const productSchema = new mongoose.Schema({
     required: true,   
    },
    category:{
-       type:ObjectId,
+       type:mongoose.ObjectId,
        ref:'Category',
        required: true,
+   },
+   subcategory:{
+    type:mongoose.ObjectId,
+    ref:'Category',
+    required: true
    },
    stock:{
     type:Number,
@@ -26,8 +31,7 @@ const productSchema = new mongoose.Schema({
    },
    photo:{
        data:Buffer,
-       ContentType:String,
-       required: true,
+       ContentType:String
    }
 },{timestamps:true});
 
