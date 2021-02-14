@@ -40,3 +40,17 @@ exports.getUser = (req,res) => {
         res.status(200).json(updatedUser);
     });
 }
+
+exports.pushOrderInPurchaseList = (req,res,next) =>{
+    let order = req.body;
+    User.findById(req.profile._id).exec((err,user) => {
+        if(err || !user){
+            return res.status(400).json({
+                  error:'User not found for pushing order' 
+              });
+          }
+          user.orders.push(order);
+          user.save();
+    });
+    next();
+}

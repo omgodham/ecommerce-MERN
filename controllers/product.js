@@ -161,7 +161,7 @@ exports.updateStock = (req,res,next) =>{
     const myOperations = req.body.products.map(currentProduct => {
         return {updateOne : {
             filter:{_id:currentProduct.product._id},
-            update:{$set : {stock:currentProduct.product.stock-currentProduct.quantity,sold:currentProduct.product.sold+currentProduct.quantity}}
+            update:{$set : {stock: (currentProduct.product.stock - currentProduct.quantity) , sold: (currentProduct.product.sold + parseInt(currentProduct.quantity)) }}
         }}
     });
     Product.bulkWrite(myOperations,{},(err,products)=>{

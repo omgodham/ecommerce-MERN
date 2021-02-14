@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {isSignedIn,isAuthenticate,isAdmin} = require('../controllers/auth');
 const {updateStock} = require('../controllers/product');
-const {getUserById} = require('../controllers/user');
+const {getUserById,pushOrderInPurchaseList} = require('../controllers/user');
 const {getOrderById,getOrder,getAllOrders,createOrder,updateStatus} = require('../controllers/order');
 
 //params
@@ -11,7 +11,7 @@ router.param('orderId',getOrderById);
 router.param('userId',getUserById);
 
 //create
-router.post('/create/order/:userId',isSignedIn,isAuthenticate,isAdmin,updateStock,createOrder);
+router.post('/create/order/:userId',isSignedIn,isAuthenticate,isAdmin,updateStock,pushOrderInPurchaseList,createOrder);
 
 //read
 router.get('/order/:orderId',getOrder);
