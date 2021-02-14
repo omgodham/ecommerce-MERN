@@ -2,6 +2,8 @@ const Product = require('../models/product');
 const formidable = require('formidable');
 const fs = require('file-system');
 const _ = require('lodash');
+
+
 //get product by id param
 exports.getProductById = (req,res,next,id) => {
     Product.findById(id)
@@ -27,8 +29,8 @@ exports.getProductById = (req,res,next,id) => {
             error:'error in creating form'
            });
         }
-        const {name,description,price,category,stock} = fields;
-        if(!name || !description || !price || !category || !stock ){
+        const {name,description,price,category,stock,subcategory} = fields;
+        if(!name || !description || !price || !category || !stock || !subcategory ){
             return res.status(400).json({
                 error:'please enter all fields'
             });
@@ -48,6 +50,7 @@ exports.getProductById = (req,res,next,id) => {
         product.save((err,product)=>{
             if(err){
                 return res.status(400).json({
+                    err,
                     error:'product saved in DB failed'
                    });
             }
@@ -155,15 +158,16 @@ exports.getPhoto = (req,res) =>{
 
 //middleware to update the stock
 exports.updateStock = (req,res,next) =>{
-    const myOperations = req.body.order.products.map(product => {
+    const myOperations = req.body.products.map(currentProduct => {
         return {updateOne : {
-            filter:{_id:product._id},
-            update:{$set : {stock:prod.stock-1,sold:prod.sold+1}}
+            filter:{_id:currentProduct.product._id},
+            update:{$set : {stock:currentProduct.product.stock-currentProduct.quantity,sold:currentProduct.product.sold+currentProduct.quantity}}
         }}
     });
     Product.bulkWrite(myOperations,{},(err,products)=>{
         if (err)
         return res.status(400).json({
+            err,
             error:'failed update stock'
         });
         next();

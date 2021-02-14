@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const cartproductSchema = new mongoose.Schema({
     product:{
-        type:ObjectId,
+        type:mongoose.ObjectId,
         ref:'Product'
     },
     quantity:{
@@ -11,7 +11,9 @@ const cartproductSchema = new mongoose.Schema({
         default:1
     }
 },{timestamps:true})
-const cartproduct = mongoose.model('Order',cartproductSchema);
+const cartproduct = mongoose.model('cartProduct',cartproductSchema);
+
+
 const orderSchema = new mongoose.Schema({
  products:{
      type:Array,
@@ -31,7 +33,7 @@ const orderSchema = new mongoose.Schema({
     ennum:['Shipped','Received','Processing','Cancelled','Deliverd']
 },
 user:{
-    type:ObjectId,
+    type:mongoose.ObjectId,
     red:'User'
 },
 address:{
@@ -41,5 +43,6 @@ address:{
 },{timestamps:true});
 
 
-const order = mongoose.model('Order',orderSchema);
-module.exports = {cartproduct,order}
+const Order = mongoose.model('Order',orderSchema);
+
+module.exports = {cartproduct,Order}
