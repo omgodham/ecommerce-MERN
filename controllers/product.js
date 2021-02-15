@@ -2,7 +2,7 @@ const Product = require('../models/product');
 const formidable = require('formidable');
 const fs = require('file-system');
 const _ = require('lodash');
-
+const url = require('url');
 
 //get product by id param
 exports.getProductById = (req,res,next,id) => {
@@ -102,7 +102,6 @@ exports.getAllProducts = (req,res) => {
                 error:'products not found'
                });
         }
-        products.photo = undefined;
         res.status(200).json(products);
     });
 }
@@ -171,5 +170,46 @@ exports.updateStock = (req,res,next) =>{
             error:'failed update stock'
         });
         next();
+    });
+}
+
+
+//get products by category
+exports.getProductsByCategory = (req,res) =>{
+    Product.find({category:req.query.category})
+    .select('-photo')
+    .exec((err,products) => {
+        if (err)
+        return res.status(400).json({
+            error:'products not found for particular category'
+        });
+        res.status(200).json(products);
+    });
+}
+
+//get products having particular category and subcategory
+exports.getProductsByCategoryAndSubcategory = (req,res) =>{
+    Product.find({category:req.query.category,subcategory:req.query.subcategory})
+    .select('-photo')
+    .exec((err,products) => {
+        if (err)
+        return res.status(400).json({
+            error:'products not found for particular category'
+        });
+        res.status(200).json(products);
+    });
+}
+
+
+//get the products having particular subcategory
+exports.getProductsBySubCategory = (req,res) =>{
+    Product.find({subcategory:req.query.subcategory})
+    .select('-photo')
+    .exec((err,products) => {
+        if (err)
+        return res.status(400).json({
+            error:'products not found for particular category'
+        });
+        res.status(200).json(products);
     });
 }

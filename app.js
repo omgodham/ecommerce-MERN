@@ -26,7 +26,7 @@ mongoose.connect('mongodb://localhost:27017/ecommerce',{
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-
+app.use(bodyParser.urlencoded({ extended: false }));
 //Routes
 app.use('/api',userRoutes);
 app.use('/api',authRoutes);
