@@ -7,10 +7,8 @@ const {body,validationResult} = require('express-validator');
 exports.signup = (req,res) =>{
     const user = new User(req.body);
     const {errors} = validationResult(req);
-    console.log(validationResult(req).formatter);
-    // console.log(typeof(errors));
+    
     if(!errors.length == 0){
-        console.log('inside');
         return res.json({
             error:errors[0].msg
         });
@@ -56,17 +54,10 @@ exports.signin = (req,res) => {
 
 //signout 
 exports.signout = (req,res) => {
-    if(req.cookies.token){ //req.cookies gives you all cookies savedin browser
         res.clearCookie('token');
         return res.status(200).json({
             message:'logout successfull'
         });
-    }
-        else{
-            return res.status(400).json({
-                error:'failed to signout'
-            })
-        }
     }
   
 //check for email existance middleware

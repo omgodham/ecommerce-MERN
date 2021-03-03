@@ -7,7 +7,7 @@ const {signup,signin,signout,isEmailExists,isPasswordConfirmed, isSignedIn} = re
 router.post('/signin',signin);
 router.post('/signup',
 check('name').isLength({min:3}).withMessage('Name should at least 3 characters'),
-check('email').isEmail(),
+check('email').isEmail().withMessage('Enter valid email'),
 check('password').isLength({min:5}).withMessage('Password should at least 5 characters'),
 isEmailExists,
 isPasswordConfirmed,

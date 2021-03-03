@@ -2,7 +2,6 @@ const Product = require('../models/product');
 const formidable = require('formidable');
 const fs = require('file-system');
 const _ = require('lodash');
-const url = require('url');
 
 //get product by id param
 exports.getProductById = (req,res,next,id) => {
@@ -31,6 +30,7 @@ exports.getProductById = (req,res,next,id) => {
         }
         const {name,description,price,category,stock,subcategory} = fields;
         if(!name || !description || !price || !category || !stock || !subcategory ){
+            console.log(name,description,price,category,subcategory,stock);
             return res.status(400).json({
                 error:'please enter all fields'
             });
