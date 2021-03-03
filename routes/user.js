@@ -21,5 +21,5 @@ router.put('/user/:userId',updateUser);
 router.put('/user/cart/:productId/:userId',updateProductInCart);
 
 // delete router
-router.get('/user/cart/delete/:productId/:userId',deleteProdctFromCart);
+router.put('/user/cart/delete/:productId/:userId',deleteProdctFromCart);
 module.exports = router;

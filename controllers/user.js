@@ -10,6 +10,8 @@ exports.getUserById = (req, res, next, id) => {
             })
         }
         req.profile = user;
+        req.cart = JSON.parse(JSON.stringify(user.cart))
+        console.log(req.cart);
         next();
     });
 }
@@ -91,29 +93,25 @@ exports.updateProductInCart = (req, res) => {
 }
 
 exports.deleteProdctFromCart = (req, res) => {
-    User.find({ "cart.product": req.cartProduct.product, _id: req.profile._id },
-        (err, user) => {
-            if (err) {
-                return res.status(400).json({
-                    err,
-                    error: 'Not able to delete'
-                });
-            }
-            //let newCart = JSON.parse(user[0].cart);
-            let newCart = JSON.parse(JSON.stringify(user[0].cart))
-            console.log("before",newCart);
-            newCart = newCart.filter(thisProduct => {
-                if (thisProduct.product !== req.cartProduct.product)
-                    return thisProduct;
-            });
-            console.log("after",newCart);
-            user.cart = newCart;
-            user.save((err, user) => {
-                if (err) console.log(err);
-                else res.status(200).json(user);
-            }); 
+
+let newCart = req.cart.filter(thisProduct => {
+    if (thisProduct.product !== req.cartProduct.product)
+        return thisProduct;
 });
+
+    User.findOneAndUpdate({ "cart.product": req.cartProduct.product, _id: req.profile._id },
+    { $set: { cart: newCart } },
+    { new: true, useFindAndModify: false },
+    (err, updatedUser) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Not able to update'
+            });
+        }
+                res.status(200).json(updatedUser);
+    });
 }
+
 
 
 //get user by id
