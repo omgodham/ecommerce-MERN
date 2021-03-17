@@ -1,5 +1,5 @@
 const {Order} = require('../models/order');
-
+const User = require('../models/user');
 
 //get order by id param
 exports.getOrderById = (req,res,next,id) => {
@@ -26,8 +26,13 @@ exports.createOrder = (req,res) =>{
                   error:'order cannot be create' 
               });
           }
+          User.findById(req.profile._id,(err,user)=>{
+            if(!err) user.orders.push(order._id);
+            else console.log(err);
+            user.save();
+        }); 
           res.status(200).json(order);
-    });    
+    });   
     }
 
 //get order by id
@@ -70,5 +75,18 @@ exports.getOrder = (req,res) => {
             });
         }
         res.status(200).json(updatedOrder);
+    });
+}
+
+exports.getOrdersByUserId = (req,res) => {
+    const {userId} = req.body;
+    Order.find({user:userId})
+    .exec((err,orders)=>{
+        if(err){
+            return res.status(400).json({
+                error:'there is no orders for this user'
+            })
+        }
+        res.status(200).json(orders);
     });
 }

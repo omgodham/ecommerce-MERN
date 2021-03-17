@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const stripe = require('stripe')('sk_test_51IIS0eGrSxjWACMwIAE00U41Bm0XTrG1zXEDNbTBU7spuhIgJR4FgW6klSQJZqJAJdOECoIxM9URQ2yzDKERaceW00U89WyXDm');
+const stripe = require('stripe')(process.env.SECRET_KEY);
 
 //async and await is too important here without that code can be failed
 exports.createSession = async (req,res) => {

@@ -17,10 +17,14 @@ const userSchema = new mongoose.Schema({
     type:String,
     required:true
     },
-   orders:{
-    type:Array,
-    default:[]   
-   },
+   orders:[
+    {
+      _id:{
+      type:mongoose.ObjectId,
+      ref:'Order'
+    }
+  }  
+  ],
    role:{
        type:Number,
        default:0

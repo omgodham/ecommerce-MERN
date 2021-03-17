@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const mongoose = require('mongoose');
+
 
 //get user by id middleware
 exports.getUserById = (req, res, next, id) => {
@@ -89,12 +89,6 @@ exports.updateProductInCart = (req, res) => {
             }
 
             res.status(200).json(updatedUser);
-            // updatedUser.cart.map((thisProduct,index) => {
-            //     if (thisProduct.product == req.cartProduct.product)
-            //        { 
-            //        return res.status(200).json(thisProduct);
-            //     }
-            // });
         });
 }
 
@@ -165,7 +159,6 @@ exports.updateUser = (req, res) => {
 
 //push order in purchase list middleware
 exports.pushOrderInPurchaseList = (req, res, next) => {
-    let order = req.body;
     User.findById(req.profile._id).exec((err, user) => {
         if (err || !user) {
             return res.status(400).json({

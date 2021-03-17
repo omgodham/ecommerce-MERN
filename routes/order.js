@@ -3,19 +3,20 @@ const router = express.Router();
 
 const {isSignedIn,isAuthenticate,isAdmin} = require('../controllers/auth');
 const {updateStock} = require('../controllers/product');
-const {getUserById,pushOrderInPurchaseList} = require('../controllers/user');
-const {getOrderById,getOrder,getAllOrders,createOrder,updateStatus} = require('../controllers/order');
+const {getUserById} = require('../controllers/user');
+const {getOrderById,getOrder,getAllOrders,createOrder,updateStatus,getOrdersByUserId} = require('../controllers/order');
 
 //params
 router.param('orderId',getOrderById);
 router.param('userId',getUserById);
 
 //create
-router.post('/create/order/:userId',isSignedIn,isAuthenticate,isAdmin,pushOrderInPurchaseList,updateStock,createOrder);
+router.post('/create/order/:userId',isSignedIn,isAuthenticate,updateStock,createOrder);
 
 //read
-router.get('/order/:orderId',getOrder);
-router.get('/orders',getAllOrders);
+router.get('/order/:orderId',isSignedIn,isAuthenticate,getOrder);
+router.get('/orders/:userId',isSignedIn,isAuthenticate,isAdmin,getAllOrders);
+router.get('/orders/user/:userId',isSignedIn,isAuthenticate,getOrdersByUserId);
 
 //update
 router.put('/order/:orderId/:userId',isSignedIn,isAuthenticate,isAdmin,updateStatus);
