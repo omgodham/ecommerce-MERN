@@ -11,14 +11,10 @@ const cartproductSchema = new mongoose.Schema({
         default:1
     }
 },{timestamps:true})
-const cartproduct = mongoose.model('cartProduct',cartproductSchema);
-
+const cartProduct = mongoose.model('cartProduct',cartproductSchema);
 
 const orderSchema = new mongoose.Schema({
- products:{
-     type:Array,
-     default:[cartproductSchema]
- } ,
+ products:[cartproductSchema],
  amount:{
      type:Number,
      required:true
@@ -37,12 +33,10 @@ user:{
     red:'User'
 },
 address:{
-    type:String,
-    required:true
+    type:String
 }
 },{timestamps:true});
 
-
 const Order = mongoose.model('Order',orderSchema);
 
-module.exports = {cartproduct,Order}
+module.exports = {cartProduct,Order}

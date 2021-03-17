@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const crypto =require('crypto');
 const {v4} = require('uuid');
-const {cartproduct} = require('./order');
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -25,10 +25,13 @@ const userSchema = new mongoose.Schema({
        type:Number,
        default:0
    },
-   cart:{
-     type:Array,
-     default:[cartproduct]
-   }
+   cart:[{
+       product:mongoose.ObjectId,
+       quantity:{
+         type:Number,
+         default:1
+       }
+     }]
 },{timestamps:true});
 
 
@@ -55,5 +58,4 @@ userSchema.methods = {
        
     }
 }
-
 module.exports = mongoose.model('User',userSchema);

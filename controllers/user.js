@@ -1,5 +1,5 @@
 const User = require('../models/user');
-
+const mongoose = require('mongoose');
 
 //get user by id middleware
 exports.getUserById = (req, res, next, id) => {
@@ -10,8 +10,8 @@ exports.getUserById = (req, res, next, id) => {
             })
         }
         req.profile = user;
-        req.cart = JSON.parse(JSON.stringify(user.cart))
-        console.log(req.cart);
+        req.cart = JSON.parse(JSON.stringify(user.cart));
+        // console.log(req.cart);
         next();
     });
 }
@@ -19,15 +19,16 @@ exports.getUserById = (req, res, next, id) => {
 
 //get cart product by id middleware
 exports.getProductInCartById = (req, res, next, id) => {
-    User.find({ "cart.product": id }, (err, user) => {
+    User.findOne({ "cart.product" : id }, (err, user) => {
         if (err) {
             return res.status(400).json({
+                err,
                 error: 'there is no user of this id'
             })
         }
-        //here we get array containing that user object hence user[0].cart
-        user[0].cart.map((thisProduct, index) => {
-            if (thisProduct.product === id)
+        // console.log(user);
+        user.cart.map((thisProduct, index) => {
+            if (thisProduct.product == id) //check values not type
                 req.cartProduct = thisProduct;
         });
         next();
@@ -44,6 +45,7 @@ exports.getProductInCart = (req, res) => {
 
 //get user whole cart  by id of user
 exports.getUserCart = (req, res) => {
+
     User.findOne({ _id: req.profile._id }, (err, user) => {
         if (err) {
             return res.status(400).json({
@@ -85,34 +87,52 @@ exports.updateProductInCart = (req, res) => {
                     error: 'Not able to update'
                 });
             }
-            updatedUser.cart.map(thisProduct => {
-                if (thisProduct.product === req.cartProduct.product)
-                    res.status(200).json(thisProduct);
-            })
+
+            res.status(200).json(updatedUser);
+            // updatedUser.cart.map((thisProduct,index) => {
+            //     if (thisProduct.product == req.cartProduct.product)
+            //        { 
+            //        return res.status(200).json(thisProduct);
+            //     }
+            // });
+        });
+}
+
+
+exports.deleteAllProductsFormCart = (req, res) => {
+    User.findOneAndUpdate({_id: req.profile._id },
+        { $set: { cart: [] } },
+        { new: true, useFindAndModify: false },
+        (err, updatedUser) => {
+            if (err) {
+                return res.status(400).json({
+                    error: 'Not able to update'
+                });
+            }
+            res.status(200).json(updatedUser);
         });
 }
 
 exports.deleteProdctFromCart = (req, res) => {
-
-let newCart = req.cart.filter(thisProduct => {
-    if (thisProduct.product !== req.cartProduct.product)
-        return thisProduct;
-});
-
-    User.findOneAndUpdate({ "cart.product": req.cartProduct.product, _id: req.profile._id },
-    { $set: { cart: newCart } },
-    { new: true, useFindAndModify: false },
-    (err, updatedUser) => {
-        if (err) {
-            return res.status(400).json({
-                error: 'Not able to update'
-            });
-        }
-                res.status(200).json(updatedUser);
+    // console.log(req.cart);
+    // console.log(req.cartProduct);
+    let newCart = req.cart.filter(thisProduct => {
+        if (thisProduct.product != req.cartProduct.product)
+            return thisProduct;
     });
+// console.log('newCart',newCart);
+    User.findOneAndUpdate({ "cart.product": req.cartProduct.product, _id: req.profile._id },
+        { $set: { cart: newCart } },
+        { new: true, useFindAndModify: false },
+        (err, updatedUser) => {
+            if (err) {
+                return res.status(400).json({
+                    error: 'Not able to update'
+                });
+            }
+            res.status(200).json(updatedUser);
+        });
 }
-
-
 
 //get user by id
 exports.getUser = (req, res) => {

@@ -11,7 +11,7 @@ router.param('orderId',getOrderById);
 router.param('userId',getUserById);
 
 //create
-router.post('/create/order/:userId',isSignedIn,isAuthenticate,isAdmin,updateStock,pushOrderInPurchaseList,createOrder);
+router.post('/create/order/:userId',isSignedIn,isAuthenticate,isAdmin,pushOrderInPurchaseList,updateStock,createOrder);
 
 //read
 router.get('/order/:orderId',getOrder);

@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 //get product by id param
 exports.getProductById = (req,res,next,id) => {
+    // console.log(id);
     Product.findById(id)
     .populate('category')
     .exec((err,product) =>{
@@ -14,6 +15,7 @@ exports.getProductById = (req,res,next,id) => {
         });
     }
         req.product = product;
+        // console.log(req.product);
         next();
     });
     }
@@ -63,6 +65,7 @@ exports.getProductById = (req,res,next,id) => {
 
  //get the product
 exports.getProduct = (req,res) =>{
+    // console.log(req.product);
         Product.findById(req.product._id).exec((err,product)=>{
             if(err){
                 return res.status(400).json({
@@ -156,21 +159,17 @@ exports.getPhoto = (req,res) =>{
 
 
 //middleware to update the stock
-exports.updateStock = (req,res,next) =>{
-    const myOperations = req.body.products.map(currentProduct => {
-        return {updateOne : {
-            filter:{_id:currentProduct.product._id},
-            update:{$set : {stock: (currentProduct.product.stock - currentProduct.quantity) , sold: (currentProduct.product.sold + parseInt(currentProduct.quantity)) }}
-        }}
+exports.updateStock =   (req,res,next) => {
+
+ req.body.products.map( async (currentProduct) => {
+
+    const thisProduct = await Product.findById(currentProduct.product);
+    
+    Product.findByIdAndUpdate(currentProduct.product,{stock:(thisProduct.stock - currentProduct.quantity) , sold:(thisProduct.sold + parseInt(currentProduct.quantity))},{new:true,useFindAndModify:false},(err,updatedUser) => {
+        if(err) res.status(400).json({err,error:'unable to update the stock'});
     });
-    Product.bulkWrite(myOperations,{},(err,products)=>{
-        if (err)
-        return res.status(400).json({
-            err,
-            error:'failed update stock'
-        });
-        next();
-    });
+ });
+ next();
 }
 
 
