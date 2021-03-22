@@ -3,7 +3,7 @@ const stripe = require('stripe')(process.env.SECRET_KEY);
 
 //async and await is too important here without that code can be failed
 exports.createSession = async (req,res) => {
-    const YOUR_DOMAIN = 'http://localhost:3000/';
+    const YOUR_DOMAIN = 'https://gentle-dawn-86783.herokuapp.com/';
     const products = req.body;
     const lineItems = [];
 

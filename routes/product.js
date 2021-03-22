@@ -18,6 +18,7 @@ router.get('/product/photo/:productId',getPhoto);
 router.get('/products/category',getProductsByCategory);
 router.get('/products/subcategory',getProductsBySubCategory);
 router.get('/products/category/subcategory',getProductsByCategoryAndSubcategory);
+
 //update
  router.put('/product/:productId/:userId',isSignedIn,isAuthenticate,isAdmin,updateProduct);
 
