@@ -41,8 +41,12 @@ app.use('/api',stripeRoutes);
 
 app.get('/',(req,res)=>{
     res.send('This is the API Page');
-})
+});
 
-app.listen('8000',()=>{
-console.log('Running at port 8000');
+let PORT = process.env.PORT;
+if (PORT == null || port == "") {
+  PORT = 8000;
+}
+app.listen(PORT || 8000 ,function(){
+    console.log(`running on port ${port}`);
 });
