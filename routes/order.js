@@ -14,12 +14,12 @@ router.param('userId',getUserById);
 router.post('/create/order/:userId',isSignedIn,isAuthenticate,updateStock,createOrder);
 
 //read
-router.get('/order/:orderId',isSignedIn,isAuthenticate,getOrder);
+router.get('/order/:orderId/:userId',isSignedIn,isAuthenticate,getOrder);
 router.get('/orders/:userId',isSignedIn,isAuthenticate,isAdmin,getAllOrders);
 router.get('/orders/user/:userId',isSignedIn,isAuthenticate,getOrdersByUserId);
 
 //update
-router.put('/order/:orderId/:userId',isSignedIn,isAuthenticate,isAdmin,updateStatus);
+router.put('/order/:orderId/:userId',isSignedIn,isAuthenticate,updateStatus);
 
 
 module.exports = router;

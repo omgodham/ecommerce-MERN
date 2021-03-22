@@ -26,11 +26,11 @@ const orderSchema = new mongoose.Schema({
  status:{
     type:String,
     default:'Received',
-    ennum:['Shipped','Received','Processing','Cancelled','Deliverd']
+    enum:['Shipped','Received','Cancelled','Deliverd'] //you must have to enter values from this list only
 },
 user:{
     type:mongoose.ObjectId,
-    red:'User'
+    ref:'User'
 },
 address:{
     type:String

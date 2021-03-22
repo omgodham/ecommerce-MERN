@@ -11,7 +11,13 @@ if(err){
         error:'No order of this id'
     });
 }
+// console.log(order.user); gives you all user object not only id
+// console.log(order.user.name);
+//this where populate is being used in order we saved only
+//user id not name but by using populate we can access that user id's all properties
+//for that we have to mention populate for that thing like here "user"  
     req.order = order;
+   
     next();
 });
 }
@@ -79,8 +85,7 @@ exports.getOrder = (req,res) => {
 }
 
 exports.getOrdersByUserId = (req,res) => {
-    const {userId} = req.body;
-    Order.find({user:userId})
+    Order.find({user:req.profile._id})
     .exec((err,orders)=>{
         if(err){
             return res.status(400).json({

@@ -13,14 +13,14 @@ const productRoutes = require('./routes/product');
 const orderRoutes = require('./routes/order');
 const stripeRoutes = require('./routes/stripe');
 //DB Connection
-mongoose.connect('mongodb://localhost:27017/ecommerce',{
+mongoose.connect(process.env.MONGODB_CONNECT,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
     useCreateIndex:true
 }).then(()=>{
     console.log('MongoDB Connnected')
 }).catch((err)=>{
-    console.log('Error Occured Connecting To DB');
+    console.log(err,'Error Occured Connecting To DB');
 })
 
 //middelwares
