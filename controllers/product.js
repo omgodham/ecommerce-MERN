@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const formidable = require('formidable');
 const fs = require('file-system');
 const _ = require('lodash');
+const product = require('../models/product');
 
 //get product by id param
 exports.getProductById = (req,res,next,id) => {
@@ -211,4 +212,16 @@ exports.getProductsBySubCategory = (req,res) =>{
         });
         res.status(200).json(products);
     });
+}
+
+exports.searchProducts = async (req,res) => {
+    const {query} = req.body;
+    const products = await Product.find({}).select('-photo');
+    const searchProducts = [];
+    products.map(product => {
+       const name = product.name.toLowerCase();
+       if(name.includes(query.toLowerCase())) 
+       searchProducts.push(product);
+    });
+    res.status(200).json(searchProducts);
 }

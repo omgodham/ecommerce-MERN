@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static('public'));
 // app.use((req, res, next) => {
 //     res.header("Access-Control-Allow-Origin": "*")
 //   }); 
@@ -39,9 +40,7 @@ app.use('/api',productRoutes);
 app.use('/api',orderRoutes);
 app.use('/api',stripeRoutes);
 
-app.get('/',(req,res)=>{
-    res.send('This is the API Page');
+
+app.listen(process.env.PORT || 8000 , () =>{
+console.log('server running on port 8000');    
 });
-
-
-app.listen(process.env.PORT || 8000);
